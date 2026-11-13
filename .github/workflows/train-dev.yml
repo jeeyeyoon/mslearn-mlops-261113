@@ -2,6 +2,12 @@ name: Train model in dev
 
 on:
   workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'src/train-model-parameters.py'
+      - 'src/job.yml'
 
 permissions:
   contents: read
@@ -23,7 +29,8 @@ jobs:
 
       - name: Install Azure ML CLI
         run: |
-          az extension add -n ml -y
+          az config set extension.use_dynamic_install=no
+          az extension add -n ml --version 2.42.0 -y
 
       - name: Detect Azure ML workspace
         id: detect
